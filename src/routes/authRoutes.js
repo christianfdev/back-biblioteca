@@ -1,4 +1,5 @@
 import { AuthController } from "../controllers/AuthController.js";
+import checkSuperAdmin from "../middlewares/checkSuperAdmin.js";
 import verifyToken from "../middlewares/verifyToken.js";
 
 import { hashPassword } from "../utils/hashFunctions.js";
@@ -7,9 +8,9 @@ export default async function authRoutes(fastify, options){
 
     const auth = new AuthController();
 
-    fastify.get('/accounts', { preHandler: verifyToken }, async (request) => {
+    fastify.get('/accounts', { preHandler: [verifyToken, checkSuperAdmin] }, async (request, reply) => {
         const accounts = await auth.list();
-    
+        reply.send({ message: 'Acesso permitido, você é superadmin!', accounts });
         return accounts;
     });
 

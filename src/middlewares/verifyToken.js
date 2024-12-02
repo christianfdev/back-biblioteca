@@ -9,11 +9,10 @@ export default async function verifyToken (request, reply) {
         }
         
         const token = authHeader.split(' ')[1];
-
+    
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         request.user = decoded;
-
     } catch (err) {
         return reply.status(401).send({ error: 'Token inválido' });
     }

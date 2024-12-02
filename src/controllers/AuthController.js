@@ -13,11 +13,10 @@ export class AuthController {
         if(!account || !await verifyPassword(senha, account[0].senha)) return null;
 
         const token = jwt.sign(
-            { id: account.id, email: account.email }, 
+            { id: account[0].id, email: account[0].email, role: account[0].role }, 
             process.env.JWT_SECRET, 
             { expiresIn: '1h' }
         );
-
         return token;
     }
 
