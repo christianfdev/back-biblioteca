@@ -1,5 +1,3 @@
-
-// Testando o check do super admin
 export default async function checkSuperAdmin (request, reply) {
 
 

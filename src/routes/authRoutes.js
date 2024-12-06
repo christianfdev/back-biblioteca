@@ -1,14 +1,14 @@
 import { AuthController } from "../controllers/AuthController.js";
 import checkSuperAdmin from "../middlewares/checkSuperAdmin.js";
-import verifyToken from "../middlewares/verifyToken.js";
-
+import verifySession from "../middlewares/verifySession.js";
 import { hashPassword } from "../utils/hashFunctions.js";
+import { sql } from "../db.js";
 
 export default async function authRoutes(fastify, options){
 
     const auth = new AuthController();
 
-    fastify.get('/accounts', { preHandler: [verifyToken, checkSuperAdmin] }, async (request, reply) => {
+    fastify.get('/accounts', { preHandler: [verifySession, checkSuperAdmin] }, async (request, reply) => {
         const accounts = await auth.list();
         reply.send({ message: 'Acesso permitido, você é superadmin!', accounts });
         return accounts;
@@ -36,6 +36,23 @@ export default async function authRoutes(fastify, options){
         return { token };
     });
     
+
+    fastify.post('/logout', async (request, reply) => {
+        const authHeader = request.headers.authorization;
+        if(!authHeader){
+            return reply.status(401).send({ error: 'Token not found' });
+        }
+        
+        const token = authHeader.split(' ')[1];
+
+        if(!token) return reply.status(401).send({error: 'Token inexistente'});
+
+        await sql`DELETE FROM sessions WHERE token = ${token}`;
+
+        reply.send({message: 'Logout realizado com sucesso'});
+    })
+
+
     fastify.post('/accounts', async (request, reply) => {
         const { nome, email, senha } = request.body;
 

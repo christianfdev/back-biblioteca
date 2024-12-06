@@ -1,8 +1,9 @@
 import { Account } from "../models/Account.js";
-
+import { verifyPassword } from "../utils/hashFunctions.js";
+import { sql } from "../db.js";
 import jwt from 'jsonwebtoken';
 
-import { verifyPassword } from "../utils/hashFunctions.js";
+
 
 export class AuthController {
 
@@ -17,8 +18,12 @@ export class AuthController {
             process.env.JWT_SECRET, 
             { expiresIn: '1h' }
         );
+
+        await sql`INSERT INTO sessions (account_id, token, expires_at) VALUES (${account[0].id}, ${token}, ${Date.now() + 1000 * 60 * 60})`;
+
         return token;
     }
+
 
     async list() {
         return await Account.list();

@@ -21,9 +21,22 @@ import { sql } from "./db.js";
 // })
 
 
-import { randomUUID } from "crypto";
-
-
-sql`CALL create_superadmin_account(${randomUUID()}, ${process.env.SPALOGIN}, ${process.env.SPAEMAIL}, ${process.env.SPASENHA}, ${process.env.SPAROLE});`.then(() => {
-    console.log('Super Admin Criado!');
+sql`
+CREATE TABLE sessions (
+    id SERIAL PRIMARY KEY,           
+    account_id TEXT NOT NULL,         
+    token TEXT NOT NULL,            
+    expires_at TIMESTAMP NOT NULL,  
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, 
+    CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES account (id) ON DELETE CASCADE
+);
+`.then(() => {
+    console.log('Tabela Criada!');
 })
+
+// import { randomUUID } from "crypto";
+
+
+// sql`CALL create_superadmin_account(${randomUUID()}, ${process.env.SPALOGIN}, ${process.env.SPAEMAIL}, ${process.env.SPASENHA}, ${process.env.SPAROLE});`.then(() => {
+//     console.log('Super Admin Criado!');
+// })
