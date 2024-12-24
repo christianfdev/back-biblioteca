@@ -18,17 +18,17 @@ export default async function authRoutes(fastify, options){
         schema: {
             body: {
                 type: 'object',
-                required: ['email', 'senha'],
+                required: ['email', 'password'],
                 properties: {
                     email: { type: 'string', format: 'email' },
-                    senha: { type: 'string', minLength: 6 }
+                    password: { type: 'string', minLength: 6 }
                 }
             }
         }
     },async (request, reply) => {
-        const { email, senha } = request.body;
+        const { email, password } = request.body;
 
-        const token = await auth.login(email, senha);
+        const token = await auth.login(email, password);
 
         if(!token) {
             return reply.status(401).send({ error: 'Usuário ou senha inválidos' });
@@ -54,24 +54,24 @@ export default async function authRoutes(fastify, options){
 
 
     fastify.post('/accounts', async (request, reply) => {
-        const { nome, email, senha } = request.body;
+        const { name, email, password } = request.body;
 
         await auth.create({
-            nome, 
+            name, 
             email, 
-            senha: await hashPassword(senha)
+            password: await hashPassword(password)
         })
         return reply.status(201).send();
     });
 
   
     fastify.put('/accounts/:id', async (request, reply) => {
-        const { nome, email, senha } = request.body;
+        const { name, email, password } = request.body;
 
         await auth.update(request.params.id,{
-            nome, 
+            name, 
             email, 
-            senha
+            password
         })
         return reply.status(201).send();
     });

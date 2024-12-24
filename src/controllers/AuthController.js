@@ -3,15 +3,13 @@ import { verifyPassword } from "../utils/hashFunctions.js";
 import { sql } from "../db.js";
 import jwt from 'jsonwebtoken';
 
-
-
 export class AuthController {
 
-    async login(email, senha) {
+    async login(email, password) {
 
         const account = await Account.getAccountByEmail(email);
 
-        if(!account || !await verifyPassword(senha, account[0].senha)) return null;
+        if(!account || !await verifyPassword(password, account[0].password)) return null;
 
         const token = jwt.sign(
             { id: account[0].id, email: account[0].email, role: account[0].role }, 
@@ -23,7 +21,6 @@ export class AuthController {
 
         return token;
     }
-
 
     async list() {
         return await Account.list();

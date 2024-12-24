@@ -5,12 +5,16 @@ import { sql } from "./db.js";
 //     console.log('Tabela apagada!')
 // })
 
+// sql`DROP TABLE IF EXISTS sessions`.then(() => {
+//     console.log('Tabela apagada!')
+// })
+
 // sql`
 // CREATE TABLE account(
 //     id TEXT PRIMARY KEY,
-//     nome VARCHAR(255) NOT NULL,
+//     name VARCHAR(255) NOT NULL,
 //     email VARCHAR(255) UNIQUE NOT NULL,
-//     senha TEXT NOT NULL,
+//     password TEXT NOT NULL,
 //     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 //     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 //     deleted_at TIMESTAMP,
@@ -33,6 +37,8 @@ CREATE TABLE sessions (
 `.then(() => {
     console.log('Tabela Criada!');
 })
+
+
 
 // import { randomUUID } from "crypto";
 

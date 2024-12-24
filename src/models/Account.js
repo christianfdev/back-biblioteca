@@ -4,15 +4,15 @@ import 'dotenv/config';
 
 export class Account {
     id;
-    nome;
+    name;
     email;
-    senha;
+    password;
 
-    constructor({ id, nome, email, senha }) {
+    constructor({ id, name, email, password }) {
         this.id = id;
-        this.nome = nome;
+        this.name = name;
         this.email = email;
-        this.senha = senha;
+        this.password = password;
     }
 
     static async list(){
@@ -25,15 +25,15 @@ export class Account {
 
     static async create (account){
         const accountId = randomUUID();
-        const { nome, email, senha } = account;
+        const { name, email, password } = account;
 
-        await sql`insert into account (id, nome, email, senha) VALUES (${accountId}, ${nome}, ${email}, ${senha})`;
+        await sql`insert into account (id, name, email, password) VALUES (${accountId}, ${name}, ${email}, ${password})`;
     }
 
     static async update (accountId, accountUpdated){
-        const { nome, email, senha } = accountUpdated;
+        const { name, email, password } = accountUpdated;
 
-        await sql`update account set nome = ${nome}, email = ${email}, senha = ${senha} where id = ${accountId}`
+        await sql`update account set name = ${name}, email = ${email}, password = ${password} where id = ${accountId}`
     }
 
     static async delete (accountId){
