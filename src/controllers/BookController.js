@@ -2,8 +2,8 @@ import { Book } from "../models/Book.js";
 
 export class BookController {
 
-    async list (){
-        return await Book.list();
+    async list (search){
+        return await Book.list(search);
     }
 
 

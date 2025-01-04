@@ -19,8 +19,13 @@ export class Book {
         this.published_on = published_on;
     }
 
-    static async list (){
-        return sql`select * from book`;
+    static async list (search){
+        if(search){
+            const formattedSearch = `%${search}%`;
+            return sql`select * from book where title ilike ${formattedSearch} or author ilike ${formattedSearch} or category ilike ${formattedSearch}`;
+        }else{
+            return sql`select * from book`;
+        }
     }
 
     static async create(book){
@@ -28,7 +33,6 @@ export class Book {
         
         return sql`insert into book (title, author, category, description, published_on) VALUES (${title}, ${author}, ${category}, ${description}, ${published_on})`;
     }
-
 
     static async update(bookId, bookUpdated){
         const { title, author, category, description, published_on } = bookUpdated;

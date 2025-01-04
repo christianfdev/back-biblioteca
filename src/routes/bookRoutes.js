@@ -8,9 +8,16 @@ export default async function bookRoutes(fastify, options) {
     const book = new BookController();
 
     fastify.get('/books', { preHandler: [verifySession] }, async (request, reply) => {
-        const books = await book.list();
+
+        const search = request.query.search;
+
+        console.log(search);
+
+        const books = await book.list(search);
         reply.status(200).send({ message: 'Sessão ativa! Acesso permitido', books });
         return books;
+
+
     })
 
     fastify.post('/books', { 
