@@ -78,6 +78,7 @@ export default async function authRoutes(fastify, options){
   
     fastify.delete('/accounts/:id', async (request, reply) => {
         await auth.delete(request.params.id);
+        
     });
 
 }

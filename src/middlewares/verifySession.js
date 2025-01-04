@@ -13,8 +13,6 @@ export default async function verifySession (request, reply) {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-
-    console.log(decoded)
     request.user = decoded;
 
     
