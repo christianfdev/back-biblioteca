@@ -50,20 +50,20 @@ import { sql } from "./db.js";
 //     console.log('Tabela Criada!');
 // })
 
-sql`
-CREATE TABLE book (
-    id SERIAL PRIMARY KEY,                 
-    title VARCHAR(255) NOT NULL,           
-    author VARCHAR(255) NOT NULL,          
-    category VARCHAR(100),                 
-    description TEXT,                     
-    published_on DATE,                     
-    created_at TIMESTAMP DEFAULT NOW(),    
-    updated_at TIMESTAMP DEFAULT NOW()     
-);
-`.then(() => {
-    console.log('Tabela Criada!');
-})
+// sql`
+// CREATE TABLE book (
+//     id SERIAL PRIMARY KEY,                 
+//     title VARCHAR(255) NOT NULL,           
+//     author VARCHAR(255) NOT NULL,          
+//     category VARCHAR(100),                 
+//     description TEXT,                     
+//     published_on DATE,                     
+//     created_at TIMESTAMP DEFAULT NOW(),    
+//     updated_at TIMESTAMP DEFAULT NOW()     
+// );
+// `.then(() => {
+//     console.log('Tabela Criada!');
+// })
 
 
 
@@ -75,3 +75,18 @@ CREATE TABLE book (
 // sql`CALL create_superadmin_account(${randomUUID()}, ${process.env.SPALOGIN}, ${process.env.SPAEMAIL}, ${process.env.SPASENHA}, ${process.env.SPAROLE});`.then(() => {
 //     console.log('Super Admin Criado!');
 // })
+
+// Criando a Tabela para Adição de Livros Favoritos
+
+sql`
+CREATE TABLE favorite_books (
+    id SERIAL PRIMARY KEY,
+    account_id TEXT NOT NULL, 
+    book_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE,
+    CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES book(id) ON DELETE CASCADE,
+    UNIQUE (account_id, book_id)
+);`.then(() => {
+        console.log('Tabela Criada!');
+});

@@ -1,6 +1,5 @@
 export default async function checkSuperAdmin (request, reply) {
 
-
     const user = request.user;
   
     if (!user) {

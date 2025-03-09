@@ -1,6 +1,5 @@
 import { sql } from '../db.js';
 
-
 export class Book {
 
     id;
@@ -43,12 +42,5 @@ export class Book {
     static async delete(bookId){
         return sql`delete from book where id = ${bookId}`
     }
-
-
 }
 
-
-
-
-
-export default Book;

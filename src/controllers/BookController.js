@@ -6,7 +6,6 @@ export class BookController {
         return await Book.list(search);
     }
 
-
     async create(book){
         return await Book.create(book);
     }
@@ -18,8 +17,4 @@ export class BookController {
     async delete(bookId){
         return await Book.delete(bookId);
     }
-
-
 }
-
-export default BookController;

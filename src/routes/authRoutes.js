@@ -35,7 +35,6 @@ export default async function authRoutes(fastify, options){
         }
         return { token };
     });
-    
 
     fastify.post('/logout', async (request, reply) => {
         const authHeader = request.headers.authorization;
@@ -50,8 +49,7 @@ export default async function authRoutes(fastify, options){
         await sql`DELETE FROM sessions WHERE token = ${token}`;
 
         reply.send({message: 'Logout realizado com sucesso'});
-    })
-
+    });
 
     fastify.post('/accounts', async (request, reply) => {
         const { name, email, password } = request.body;
@@ -80,5 +78,4 @@ export default async function authRoutes(fastify, options){
         await auth.delete(request.params.id);
         
     });
-
 }

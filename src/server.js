@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import authRoutes from './routes/authRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
+import favoriteRoutes from './routes/favoriteRoutes.js';
 
 const fastify = Fastify( {
     logger: true
@@ -16,6 +17,7 @@ fastify.register(cors, {
 
 fastify.register(authRoutes);
 fastify.register(bookRoutes);
+fastify.register(favoriteRoutes);
 
 fastify.listen({ port: 3000, host: '0.0.0.0' }, function (err, address) {
     if (err) {
