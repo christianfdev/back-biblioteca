@@ -57,7 +57,6 @@ export default async function bookRoutes(fastify, options) {
     });
 
     fastify.delete('/books/:id', { preHandler : [verifySession, checkSuperAdmin] }, async (request, reply) => {
-        
         await book.delete(request.params.id);
 
         return reply.status(204).send();

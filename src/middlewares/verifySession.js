@@ -4,7 +4,7 @@ export default async function verifySession (request, reply) {
     
     try {
         const authHeader = request.headers.authorization;
-        
+
         if(!authHeader){
             return reply.status(401).send({ error: 'Token not found' });
         }
@@ -14,6 +14,8 @@ export default async function verifySession (request, reply) {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         request.user = decoded;
+
+        console.log(request.user)
 
         const session = await sql`SELECT 1 FROM sessions WHERE token = ${token} AND expires_at > NOW()`;
     
