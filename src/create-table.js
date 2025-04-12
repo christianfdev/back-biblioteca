@@ -2,20 +2,13 @@ import 'dotenv/config';
 import { sql } from "./db.js";
 
 
-// Para dropar a tabela Account
-
-
-// sql`DROP TABLE IF EXISTS account`.then(() => {
-//     console.log('Tabela apagada!')
-// })
-
-
-// Para dropar a tabela Sessions 
+// Para dropar as tabelas, apenas altere o nome da tabela  
 
 
 // sql`DROP TABLE IF EXISTS sessions`.then(() => {
 //     console.log('Tabela apagada!')
 // })
+
 
 
 // Criando a tabela Account
@@ -50,6 +43,10 @@ import { sql } from "./db.js";
 //     console.log('Tabela Criada!');
 // })
 
+
+// Criando a Tabela de Livros
+
+
 // sql`
 // CREATE TABLE book (
 //     id SERIAL PRIMARY KEY,                 
@@ -57,7 +54,8 @@ import { sql } from "./db.js";
 //     author VARCHAR(255) NOT NULL,          
 //     category VARCHAR(100),                 
 //     description TEXT,                     
-//     published_on DATE,                     
+//     published_on DATE,
+//     cover_image VARCHAR(500),                     
 //     created_at TIMESTAMP DEFAULT NOW(),    
 //     updated_at TIMESTAMP DEFAULT NOW()     
 // );
@@ -65,9 +63,24 @@ import { sql } from "./db.js";
 //     console.log('Tabela Criada!');
 // })
 
+// Criando a Tabela para Adição de Livros Favoritos
+
+// sql`
+// CREATE TABLE favorite_books (
+//     id SERIAL PRIMARY KEY,
+//     account_id TEXT NOT NULL, 
+//     book_id INTEGER NOT NULL,
+//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+//     CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE,
+//     CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES book(id) ON DELETE CASCADE,
+//     UNIQUE (account_id, book_id)
+// );`.then(() => {
+//         console.log('Tabela Criada!');
+// });
 
 
-// Criando um Superadmin
+////////////////// Criando um Superadmin \\\\\\\\\\\\\\\\\\
+
 
 // import { randomUUID } from "crypto";
 
@@ -76,17 +89,3 @@ import { sql } from "./db.js";
 //     console.log('Super Admin Criado!');
 // })
 
-// Criando a Tabela para Adição de Livros Favoritos
-
-sql`
-CREATE TABLE favorite_books (
-    id SERIAL PRIMARY KEY,
-    account_id TEXT NOT NULL, 
-    book_id INTEGER NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE,
-    CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES book(id) ON DELETE CASCADE,
-    UNIQUE (account_id, book_id)
-);`.then(() => {
-        console.log('Tabela Criada!');
-});

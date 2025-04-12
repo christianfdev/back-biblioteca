@@ -18,39 +18,42 @@ export default async function bookRoutes(fastify, options) {
         schema: {
             body: {
                 type: 'object',
-                required: ['title', 'author', 'category', 'description', 'published_on'],
+                required: ['title', 'author', 'category', 'description', 'published_on', 'cover_image'],
                 properties: {
                     title: { type: 'string' },
                     author: { type: 'string' },
                     category: { type: 'string' },
                     description: { type: 'string' },
-                    published_on: { type: 'string' }
+                    published_on: { type: 'string' },
+                    cover_image: {type: 'string'}
                 }
             }
         }
     }, async (request, reply) => {
-        const { title, author, category, description, published_on } = request.body;
+        const { title, author, category, description, published_on, cover_image } = request.body;
 
         await book.create({ 
             title, 
             author, 
             category, 
             description, 
-            published_on 
+            published_on,
+            cover_image
         });
         
         return reply.status(201).send();
     });
 
     fastify.put('/books/:id', { preHandler: [verifySession, checkSuperAdmin] }, async (request, reply) => {
-        const { title, author, category, description, published_on } = request.body;
+        const { title, author, category, description, published_on, cover_image } = request.body;
 
         await book.update(request.params.id, { 
             title, 
             author, 
             category, 
             description, 
-            published_on 
+            published_on, 
+            cover_image
         });
 
         return reply.status(201).send();
