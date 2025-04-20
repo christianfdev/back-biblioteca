@@ -18,13 +18,8 @@ export default async function favoriteRoutes(fastify, options){
     });
 
     fastify.post('/favorite', {preHandler: [verifySession]}, async (request, reply) => {
-        console.log("CHEGAMOS AQUI PRIMEIRO!!!")
-        
         const { bookId } = request.body;
-
-        console.log("CHEGAMOS AQUI!!!")
         await fav.create(request.user.id, bookId);
-        console.log("CHEGAMOS AQUI 222222222222222")
         return reply.status(201).send({message: 'Favorito Adicionado!'});
     });
 
