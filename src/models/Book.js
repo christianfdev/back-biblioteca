@@ -29,6 +29,11 @@ export class Book {
         }
     }
 
+    static async findOne(bookId){
+        const book = await sql`select * from book where id = ${bookId}`;
+        return book[0];
+    }
+
     static async create(book){
         const { title, author, category, description, published_on, cover_image} = book;
         

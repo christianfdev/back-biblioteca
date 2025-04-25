@@ -6,7 +6,8 @@ export default async function favoriteRoutes(fastify, options){
     const fav = new FavoriteController();
 
     fastify.get('/favorite', {preHandler: [verifySession]}, async (request, reply) => {
-        const favorites = await fav.list(request.user.id);
+        const search = request.query.search;
+        const favorites = await fav.list(search, request.user.id);
         reply.status(200).send({message: 'Sessão Ativa! Acesso Permitido!', favorites});
         return favorites;
     });

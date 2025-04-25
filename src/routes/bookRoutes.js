@@ -4,13 +4,20 @@ import verifySession from "../middlewares/verifySession.js";
 
 export default async function bookRoutes(fastify, options) {
 
-    const book = new BookController();
+    const bookController = new BookController();
 
     fastify.get('/books', { preHandler: [verifySession] }, async (request, reply) => {
         const search = request.query.search;
-        const books = await book.list(search);
+        const books = await bookController.list(search);
         reply.status(200).send({ message: 'Sessão ativa! Acesso permitido', books });
         return books;   
+    });
+
+    fastify.get('/books/:id', { preHandler: [verifySession] }, async (request, reply) => {
+        const bookId = request.params.id;
+        const book = await bookController.findOne(bookId);
+        reply.status(200).send({ message: 'Sessão ativa! Acesso permitido', book });
+        return book;   
     });
 
     fastify.post('/books', { 
@@ -32,7 +39,7 @@ export default async function bookRoutes(fastify, options) {
     }, async (request, reply) => {
         const { title, author, category, description, published_on, cover_image } = request.body;
 
-        await book.create({ 
+        await bookController.create({ 
             title, 
             author, 
             category, 
@@ -47,7 +54,7 @@ export default async function bookRoutes(fastify, options) {
     fastify.put('/books/:id', { preHandler: [verifySession, checkSuperAdmin] }, async (request, reply) => {
         const { title, author, category, description, published_on, cover_image } = request.body;
 
-        await book.update(request.params.id, { 
+        await bookController.update(request.params.id, { 
             title, 
             author, 
             category, 
@@ -60,7 +67,7 @@ export default async function bookRoutes(fastify, options) {
     });
 
     fastify.delete('/books/:id', { preHandler : [verifySession, checkSuperAdmin] }, async (request, reply) => {
-        await book.delete(request.params.id);
+        await bookController.delete(request.params.id);
 
         return reply.status(204).send();
     });

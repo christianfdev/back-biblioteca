@@ -2,8 +2,8 @@ import { Favorite } from "../models/Favorite.js";
 
 export class FavoriteController {
 
-    async list (accountId){
-        return await Favorite.listFavorites(accountId);
+    async list (search, accountId){
+        return await Favorite.listFavorites(search, accountId);
     }
 
     async create (accountId, bookId) {

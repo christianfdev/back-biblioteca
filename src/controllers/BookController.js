@@ -6,6 +6,10 @@ export class BookController {
         return await Book.list(search);
     }
 
+    async findOne (bookId){
+        return await Book.findOne(bookId);
+    }
+
     async create(book){
         return await Book.create(book);
     }

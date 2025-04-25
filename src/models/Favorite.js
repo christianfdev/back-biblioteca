@@ -20,8 +20,14 @@ export class Favorite {
         return sql`DELETE FROM favorite_books WHERE account_id = ${accountId} AND book_id = ${bookId}`;
     }
 
-    static async listFavorites (accountId){
-        return sql`SELECT b.* FROM book b JOIN favorite_books fb ON b.id = fb.book_id WHERE fb.account_id = ${accountId}`;
+
+    static async listFavorites (search, accountId){
+        if(search){
+            const formattedSearch = `%${search}%`;
+            return sql`SELECT b.* FROM book b JOIN favorite_books fb ON b.id = fb.book_id WHERE fb.account_id = ${accountId} AND (title ilike ${formattedSearch} or author ilike ${formattedSearch} or category ilike ${formattedSearch})`;
+        }else{
+            return sql`SELECT b.* FROM book b JOIN favorite_books fb ON b.id = fb.book_id WHERE fb.account_id = ${accountId}`;
+        }
     }
 
     static async listMostFavorites () {
