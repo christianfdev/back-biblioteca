@@ -1,17 +1,34 @@
-import { AuthController } from "../controllers/AuthController.js";
+import { UserController } from "../controllers/UserController.js";
 import checkSuperAdmin from "../middlewares/checkSuperAdmin.js";
 import verifySession from "../middlewares/verifySession.js";
 import { hashPassword } from "../utils/hashFunctions.js";
 import { sql } from "../db.js";
 
-export default async function authRoutes(fastify, options){
+export default async function userRoutes(fastify, options){
 
-    const auth = new AuthController();
+    const user = new UserController();
 
-    fastify.get('/accounts', { preHandler: [verifySession, checkSuperAdmin] }, async (request, reply) => {
-        const accounts = await auth.list();
-        reply.send({ message: 'Acesso permitido, você é superadmin!', accounts });
-        return accounts;
+    fastify.get('/users', { preHandler: [verifySession, checkSuperAdmin] }, async (request, reply) => {
+        const users = await user.list();
+        reply.send({ message: 'Acesso permitido, você é superadmin!', users });
+        return users;
+    });
+
+    fastify.get('/me', { preHandler: [verifySession] }, async (request, reply) => {
+        const userId = request.user.id;
+    
+        const userAccount = await sql`SELECT id, name, email, role FROM user_account WHERE id = ${userId} AND deleted_at IS NULL`;
+    
+        if (!userAccount[0]) {
+            return reply.status(404).send({ error: 'Usuário não encontrado' });
+        }
+    
+        return {
+            id: userAccount[0].id,
+            name: userAccount[0].name,
+            email: userAccount[0].email,
+            role: userAccount[0].role
+        };
     });
 
     fastify.post('/login', {
@@ -28,7 +45,7 @@ export default async function authRoutes(fastify, options){
     },async (request, reply) => {
         const { email, password } = request.body;
 
-        const token = await auth.login(email, password);
+        const token = await user.login(email, password);
 
         if(!token) {
             return reply.status(401).send({ error: 'Usuário ou senha inválidos' });
@@ -51,22 +68,21 @@ export default async function authRoutes(fastify, options){
         reply.send({message: 'Logout realizado com sucesso'});
     });
 
-    fastify.post('/accounts', async (request, reply) => {
+    fastify.post('/users', async (request, reply) => {
         const { name, email, password } = request.body;
 
-        await auth.create({
+        await user.create({
             name, 
             email, 
             password: await hashPassword(password)
         })
         return reply.status(201).send();
     });
-
   
-    fastify.put('/accounts/:id', async (request, reply) => {
+    fastify.put('/users/:id', async (request, reply) => {
         const { name, email, password } = request.body;
 
-        await auth.update(request.params.id,{
+        await user.update(request.params.id,{
             name, 
             email, 
             password
@@ -74,8 +90,8 @@ export default async function authRoutes(fastify, options){
         return reply.status(201).send();
     });
   
-    fastify.delete('/accounts/:id', async (request, reply) => {
-        await auth.delete(request.params.id);
+    fastify.delete('/users/:id', async (request, reply) => {
+        await user.delete(request.params.id);
         
     });
 }

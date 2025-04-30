@@ -25,9 +25,8 @@ export default async function favoriteRoutes(fastify, options){
     });
 
     fastify.delete('/favorite/:bookId', {preHandler: [verifySession]}, async (request, reply) => {
-        const accountId = request.user.id;
         const { bookId } = request.params;
-        await fav.delete(accountId, bookId);
+        await fav.delete(request.user.id, bookId);
         return reply.status(200).send({message: 'Remoção Realizada!'});
     });
 }

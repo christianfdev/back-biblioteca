@@ -5,7 +5,7 @@ import { sql } from "./db.js";
 // Para dropar as tabelas, apenas altere o nome da tabela  
 
 
-// sql`DROP TABLE IF EXISTS sessions`.then(() => {
+// sql`DROP TABLE IF EXISTS account`.then(() => {
 //     console.log('Tabela apagada!')
 // })
 
@@ -14,7 +14,7 @@ import { sql } from "./db.js";
 // Criando a tabela Account
 
 // sql`
-// CREATE TABLE account(
+// CREATE TABLE user_account(
 //     id TEXT PRIMARY KEY,
 //     name VARCHAR(255) NOT NULL,
 //     email VARCHAR(255) UNIQUE NOT NULL,
@@ -33,11 +33,11 @@ import { sql } from "./db.js";
 // sql`
 // CREATE TABLE sessions (
 //     id SERIAL PRIMARY KEY,           
-//     account_id TEXT NOT NULL,         
+//     user_account_id TEXT NOT NULL,         
 //     token TEXT NOT NULL,            
 //     expires_at TIMESTAMP NOT NULL,  
 //     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL, 
-//     CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES account (id) ON DELETE CASCADE
+//     CONSTRAINT fk_user_account FOREIGN KEY (user_account_id) REFERENCES user_account (id) ON DELETE CASCADE
 // );
 // `.then(() => {
 //     console.log('Tabela Criada!');
@@ -68,24 +68,24 @@ import { sql } from "./db.js";
 // sql`
 // CREATE TABLE favorite_books (
 //     id SERIAL PRIMARY KEY,
-//     account_id TEXT NOT NULL, 
+//     user_account_id TEXT NOT NULL, 
 //     book_id INTEGER NOT NULL,
 //     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-//     CONSTRAINT fk_account FOREIGN KEY (account_id) REFERENCES account(id) ON DELETE CASCADE,
+//     CONSTRAINT fk_user_account FOREIGN KEY (user_account_id) REFERENCES user_account(id) ON DELETE CASCADE,
 //     CONSTRAINT fk_book FOREIGN KEY (book_id) REFERENCES book(id) ON DELETE CASCADE,
-//     UNIQUE (account_id, book_id)
+//     UNIQUE (user_account_id, book_id)
 // );`.then(() => {
 //         console.log('Tabela Criada!');
 // });
 
 
-////////////////// Criando um Superadmin \\\\\\\\\\\\\\\\\\
+// Criando um Superadmin
 
 
-// import { randomUUID } from "crypto";
+import { randomUUID } from "crypto";
 
 
-// sql`CALL create_superadmin_account(${randomUUID()}, ${process.env.SPALOGIN}, ${process.env.SPAEMAIL}, ${process.env.SPASENHA}, ${process.env.SPAROLE});`.then(() => {
-//     console.log('Super Admin Criado!');
-// })
+sql`CALL create_superadmin_account(${randomUUID()}, ${process.env.SPALOGIN}, ${process.env.SPAEMAIL}, ${process.env.SPASENHA}, ${process.env.SPAROLE});`.then(() => {
+    console.log('Super Admin Criado!');
+})
 

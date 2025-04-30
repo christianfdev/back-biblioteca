@@ -15,8 +15,6 @@ export default async function verifySession (request, reply) {
 
         request.user = decoded;
 
-        console.log(request.user)
-
         const session = await sql`SELECT 1 FROM sessions WHERE token = ${token} AND expires_at > NOW()`;
     
         if (session.length === 0) {

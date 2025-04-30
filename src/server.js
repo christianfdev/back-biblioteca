@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
-import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import bookRoutes from './routes/bookRoutes.js';
 import favoriteRoutes from './routes/favoriteRoutes.js';
 
@@ -15,7 +15,7 @@ fastify.register(cors, {
     credentials: true, 
   });
 
-fastify.register(authRoutes);
+fastify.register(userRoutes);
 fastify.register(bookRoutes);
 fastify.register(favoriteRoutes);
 
