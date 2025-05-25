@@ -51,17 +51,37 @@ export default async function bookRoutes(fastify, options) {
         return reply.status(201).send();
     });
 
-    fastify.put('/books/:id', { preHandler: [verifySession, checkSuperAdmin] }, async (request, reply) => {
+    fastify.put('/books/:id', { preHandler: [verifySession, checkSuperAdmin],
+        schema: {
+            body: {
+                type: 'object',
+                required: ['title', 'author', 'category', 'description', 'published_on'],
+                properties: {
+                    title: { type: 'string' },
+                    author: { type: 'string' },
+                    category: { type: 'string' },
+                    description: { type: 'string' },
+                    published_on: { type: 'string', format: 'date' },
+                    cover_image: { type: 'string', nullable: true } 
+                }
+            }
+        }
+     }, async (request, reply) => {
         const { title, author, category, description, published_on, cover_image } = request.body;
 
-        await bookController.update(request.params.id, { 
-            title, 
-            author, 
-            category, 
-            description, 
-            published_on, 
-            cover_image
-        });
+        const updateData = {
+            title,
+            author,
+            category,
+            description,
+            published_on
+        };
+
+        if (cover_image !== undefined) {
+            updateData.cover_image = cover_image;
+        }
+
+        await bookController.update(request.params.id, updateData);
 
         return reply.status(201).send();
     });

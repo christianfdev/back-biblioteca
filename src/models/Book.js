@@ -35,15 +35,17 @@ export class Book {
     }
 
     static async create(book){
-        const { title, author, category, description, published_on, cover_image} = book;
+        const { title, author, category, description, published_on, cover_image } = book;
         
         return sql`insert into book (title, author, category, description, published_on, cover_image) VALUES (${title}, ${author}, ${category}, ${description}, ${published_on}, ${cover_image})`;
     }
 
     static async update(bookId, bookUpdated){
-        const { title, author, category, description, published_on, cover_image} = bookUpdated;
+        const { title, author, category, description, published_on, cover_image } = bookUpdated;
 
-        return sql`update book set title = ${title}, author = ${author}, category = ${category}, description = ${description}, published_on = ${published_on}, cover_image = ${cover_image} where id = ${bookId}`
+        if(cover_image){
+            return sql`update book set title = ${title}, author = ${author}, category = ${category}, description = ${description}, published_on = ${published_on}, cover_image = ${cover_image} where id = ${bookId}`
+        } return sql`update book set title = ${title}, author = ${author}, category = ${category}, description = ${description}, published_on = ${published_on} where id = ${bookId}`
     }
 
     static async delete(bookId){

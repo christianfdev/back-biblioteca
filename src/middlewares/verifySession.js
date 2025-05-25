@@ -23,6 +23,4 @@ export default async function verifySession (request, reply) {
     } catch (error) {
         return reply.status(401).send({ error: 'Token inválido' });
     }
-    
-
 }
